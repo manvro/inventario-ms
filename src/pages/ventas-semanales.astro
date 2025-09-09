@@ -1,0 +1,172 @@
+---
+import Layout from "../layouts/Layout.astro";
+import productos from "../data/productos.json";
+---
+
+<Layout>
+    <main class="max-w-7xl mx-auto p-6 space-y-8">
+        <header class="flex items-center justify-between">
+            <h1 class="text-2xl md:text-3xl font-bold">Ventas semanales</h1>
+            <a href="/" class="text-sm text-blue-600 hover:underline"
+                >← Volver al inicio</a
+            >
+        </header>
+
+        <!-- 1) Buscador / Agregar producto -->
+        <section class="grid gap-4 md:grid-cols-3">
+            <div class="md:col-span-2 border rounded-xl p-4">
+                <h2 class="font-semibold mb-3">Buscar producto</h2>
+                <div class="flex gap-3">
+                    <input
+                        id="buscarProducto" list="listaProductos"
+                        type="text"
+                        placeholder="Nombre, SKU o código de barras"
+                        class="w-full border rounded-lg px-4 py-2"
+                        aria-label="Buscar producto"
+                    />
+<datalist id="listaProductos"></datalist>
+
+                    <button
+                        id="btnAgregarBusqueda"
+                        class="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium disabled:opacity-50"
+                        disabled
+                        title="Agregar producto seleccionado"
+                    >
+                        Agregar
+                    </button>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">
+                    Luego conectaremos este buscador a tu catálogo.
+                </p>
+            </div>
+
+            <div class="border rounded-xl p-4">
+                <h2 class="font-semibold mb-3">Atajos</h2>
+                <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+                    <li>
+                        <kbd class="px-1.5 py-0.5 border rounded">Ctrl</kbd> + <kbd
+                            class="px-1.5 py-0.5 border rounded">K</kbd
+                        > abrir buscador
+                    </li>
+                    <li>
+                        <kbd class="px-1.5 py-0.5 border rounded">+</kbd>/<kbd
+                            class="px-1.5 py-0.5 border rounded">−</kbd
+                        > ajustar cantidad
+                    </li>
+                    <li>
+                        <kbd class="px-1.5 py-0.5 border rounded">Enter</kbd> agrega
+                        producto
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2) Carrito -->
+        <section class="border rounded-xl overflow-hidden">
+            <div class="px-4 py-3 border-b bg-gray-50 font-semibold">
+                Carrito
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr class="[&>th]:text-left [&>th]:px-4 [&>th]:py-2">
+                            <th class="w-6"></th>
+                            <th>Producto</th>
+                            <th class="text-right">Precio (CLP)</th>
+                            <th class="text-center">Cantidad</th>
+                            <th class="text-right">Subtotal</th>
+                            <th class="text-right w-20">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyCarrito" class="[&>tr]:border-t">
+                        <!-- Fila de ejemplo (placeholder visual) -->
+                        <tr class="[&>td]:px-4 [&>td]:py-2">
+                            <td>1</td>
+                            <td>Pantalón cargo</td>
+                            <td class="text-right">$12.990</td>
+                            <td class="text-center">
+                                <div class="inline-flex items-center gap-2">
+                                    <button
+                                        class="border rounded px-2 py-1"
+                                        title="Quitar 1">−</button
+                                    >
+                                    <span>1</span>
+                                    <button
+                                        class="border rounded px-2 py-1"
+                                        title="Agregar 1">+</button
+                                    >
+                                </div>
+                            </td>
+                            <td class="text-right">$12.990</td>
+                            <td class="text-right">
+                                <button class="text-red-600 hover:underline"
+                                    >Eliminar</button
+                                >
+                            </td>
+                        </tr>
+                        <!-- Fin placeholder -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3) Totales y confirmación -->
+        <section class="grid gap-4 md:grid-cols-3">
+            <div class="md:col-span-2 border rounded-xl p-4">
+                <h2 class="font-semibold mb-3">Observaciones</h2>
+                <textarea
+                    class="w-full border rounded-lg px-4 py-2 min-h-[88px]"
+                    placeholder="Notas de la venta (opcional)"></textarea>
+            </div>
+
+            <div class="border rounded-xl p-4">
+                <h2 class="font-semibold mb-3">Resumen</h2>
+            <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span>Ítems</span><span id="lblItems">0</span></div>
+            <div class="flex justify-between"><span>Total bruto</span><span id="lblBruto">$0</span></div>
+            <div class="flex justify-between">
+                <span>Descuento</span>
+                <span>
+                <input id="inpDescuento" type="number" class="w-24 border rounded px-2 py-1 text-right" placeholder="0" aria-label="Descuento en CLP" />
+                </span>
+            </div>
+            <div class="flex justify-between font-semibold text-lg pt-2 border-t">
+                <span>Total a pagar</span><span id="lblTotal">$0</span>
+            </div>
+            <div class="pt-2">
+                <label class="block text-xs text-gray-500 mb-1">Medio de pago</label>
+                <select id="selMedioPago" class="w-full border rounded px-3 py-2">
+                <option>Efectivo</option>
+                <option>Débito/Crédito</option>
+                <option>Transferencia</option>
+                </select>
+            </div>
+            </div>
+
+                <div class="flex gap-2 mt-4">
+                    <button class="flex-1 px-4 py-2 rounded border"
+                        >Cancelar</button
+                    >
+                    <button
+                        class="flex-1 px-4 py-2 rounded bg-blue-600 text-white font-semibold"
+                        >Confirmar venta</button
+                    >
+                </div>
+            </div>
+        </section>
+
+<script
+    type="application/json"
+    id="data-productos"
+    set:html={JSON.stringify(productos)}>
+</script>
+
+
+    <script
+        type="module"
+        src={new URL("../scripts/ventas-semanales.ts", import.meta.url).pathname}>
+    </script>
+
+
+    </main>
+</Layout>

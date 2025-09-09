@@ -1,0 +1,30 @@
+---
+const error = Astro.url.searchParams.get("error") || ""
+---
+
+<html lang="es">
+  <head>
+    <title>Login - Inventario MS</title>
+  </head>
+  <body class="bg-fondo min-h-screen flex items-center justify-center">
+    <form action="/login" method="POST" class="bg-white p-6 rounded shadow-md w-full max-w-sm space-y-4">
+      <h1 class="text-xl font-bold">Iniciar sesión</h1>
+
+      {error && <p class="text-red-600 text-sm">Credenciales incorrectas</p>}
+
+      <div>
+        <label class="block font-semibold">Correo electrónico</label>
+        <input name="email" type="email" required class="w-full p-2 border rounded" />
+      </div>
+
+      <div>
+        <label class="block font-semibold">Contraseña</label>
+        <input name="password" type="password" required class="w-full p-2 border rounded" />
+      </div>
+
+      <button type="submit" class="bg-primario text-white px-4 py-2 rounded hover:bg-blue-700">
+        Entrar
+      </button>
+    </form>
+  </body>
+</html>

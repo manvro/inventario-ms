@@ -1,11 +1,120 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import productos from "../data/productos.json";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+// ⬇️ esto es lo nuevo: sacamos request desde Astro global context
+const { request } = Astro;
+
+const url = new URL(request.url);
+const busqueda = url.searchParams.get("busqueda")?.toLowerCase() || "";
+const orden = url.searchParams.get("orden") || "";
+
+let productosFiltrados = productos.filter(p =>
+  p.nombre.toLowerCase().includes(busqueda)
+);
+
+
 ---
 
+
 <Layout>
-	<Welcome />
+  <main class="max-w-6xl mx-auto p-6">
+    <!-- Banner destacado -->
+    <section class="bg-black text-white rounded-xl p-10 flex flex-col md:flex-row items-center justify-between mb-10">
+      <div class="text-center md:text-left">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">Administración de nuestra tiendita</h1>
+        <a href="/ventas-semanales" class="inline-block bg-white text-black font-semibold px-5 py-2 rounded shadow hover:bg-gray-200 transition">
+          VENTAS SEMANALES
+        </a>
+
+      </div>
+      <img src="/fotos_productos/fondo_pared_blanca.jpg" alt="Estandarte" class="w-32 md:w-56 mt-6 md:mt-0" />
+    </section>
+
+    <!-- Catálogo dinámico -->
+    <section id="gridProductos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {productosFiltrados.map((p, i) => (
+        <button
+          type="button"
+          data-card
+          data-index={String(i)}
+          data-nombre={p.nombre}
+          data-original-nombre={p.nombre} 
+          data-stock={String(p.stock)}
+          data-precio-venta={String(p.precio_venta)}
+          data-precio-compra={String(p.precio_compra ?? 0)}
+          data-imagen={p.imagen}
+          class="text-left w-full border rounded-xl shadow-md hover:shadow-lg p-4 transition bg-white"
+          aria-label={`Ver detalle de ${p.nombre}`}
+        >
+          <img src={p.imagen} alt={p.nombre} class="w-full h-48 object-cover rounded" />
+          <h2 class="mt-3 text-lg font-semibold truncate">{p.nombre}</h2>
+          <p class="text-gray-600 text-sm">Stock: <span data-stock-txt>{p.stock}</span> unidades</p>
+          <p class="text-red-600 font-bold">$<span data-precio-compra="">{p.precio_compra}</span></p>
+          <p class="text-green-600 font-bold">$<span data-precio-venta-txt>{p.precio_venta}</span></p>
+          <span class="text-blue-600 hover:underline text-sm mt-2 inline-block">Ver detalle</span>
+        </button>
+      ))}
+    </section>
+
+
+    <!-- Modal / Panel de detalle -->
+    <dialog id="modalProducto" class="rounded-xl p-0 w-full max-w-md backdrop:bg-black/40" aria-labelledby="modalTitulo" aria-modal="true">
+      <form id="formProducto" enctype="multipart/form-data" class="bg-white rounded-xl overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3 border-b">
+          <h3 id="modalTitulo" class="text-lg font-semibold">Administrar producto</h3>
+          <button type="button" id="btnCerrarModal" class="text-gray-500 hover:text-black text-xl leading-none" aria-label="Cerrar">&times;</button>
+        </div>
+
+        <div class="p-5 space-y-4">
+          <!-- Identificador oculto -->
+          <input type="hidden" id="mIndex" name="index" /><input type="hidden" id="mOriginalNombre" name="original_nombre" />
+          <div class="flex items-center gap-4">
+            <img id="mImagen" src="" alt="" class="w-20 h-20 object-cover rounded" />
+            <div class="grow">
+              <label class="block text-xs text-gray-500">Nombre</label>
+              <input id="mNombre" name="nombre" class="w-full border rounded px-3 py-2" readonly />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label for="mStock" class="block text-xs text-gray-500">Stock</label>
+              <input type="number" id="mStock" name="stock" min="0" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label for="mPrecioCompra" class="block text-xs text-gray-500">Precio compra</label>
+              <input type="number" id="mPrecioCompra" name="precio_compra" min="0" step="1" class="w-full border rounded px-3 py-2" />
+            </div>
+            <div>
+              <label for="mPrecioVenta" class="block text-xs text-gray-500">Precio venta</label>
+              <input type="number" id="mPrecioVenta" name="precio_venta" min="0" step="1" class="w-full border rounded px-3 py-2" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-500">URL imagen</label>
+            <input id="mImagenTxt" name="imagen" class="w-full border rounded px-3 py-2" />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 px-5 py-3 border-t bg-gray-50">
+          <button type="button" id="btnCerrarModal2" class="px-4 py-2 rounded border hover:bg-gray-100">Cancelar</button>
+          <button type="submit" id="btnGuardar" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Guardar</button>
+        </div>
+      </form>
+    </dialog>
+
+
+
+<script
+  type="module"
+  src={new URL("../scripts/product-modal.ts", import.meta.url).pathname}>
+</script>
+
+
+
+
+  </main>
 </Layout>
