@@ -1,19 +1,20 @@
-	---
-	import "../styles/global.css";
-	import Navbar from "../components/Navbar.astro";
+---
+import "../styles/global.css";
+import Navbar from "../components/Navbar.astro";
 
-	---
+const { title = "Inventario MS", showNavbar = true } = Astro.props;
+---
 
-	<html lang="es">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Inventario MS</title>
+		<title>{title}</title>
 	</head>
 	<body class="min-h-screen w-full bg-cover bg-center font-sans text-black">
-		<Navbar />
+		{showNavbar && <Navbar />}
 		<main class="px-4 py-6">
 		<slot />
 		</main>
 	</body>
-	</html>
+</html>

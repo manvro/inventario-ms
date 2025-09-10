@@ -122,13 +122,13 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
                 return `
         <li data-idx="${i}"
             class="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100 ${i === selIdx ? 'bg-gray-100' : ''}">
-          ${img
+            ${img
             ? `<img src="${img}" alt="${p.nombre}" class="w-10 h-10 object-cover rounded-lg" />`
             : `<div class="w-10 h-10 bg-gray-200 rounded-lg"></div>`}
-          <div class="min-w-0 grow">
+            <div class="min-w-0 grow">
             <div class="text-sm font-medium truncate">${highlight(p.nombre, qn)}</div>
-          </div>
-          <span class="text-xs text-gray-500 shrink-0">${CLP.format(p.precio_venta)}</span>
+            </div>
+            <span class="text-xs text-gray-500 shrink-0">${CLP.format(p.precio_venta)}</span>
         </li>`;
             }).join("");
 
