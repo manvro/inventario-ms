@@ -1,6 +1,4 @@
----
-// Si quieres usar props en el futuro para el usuario o rutas, se pueden agregar aquí.
----
+
 
     <nav class="w-full bg-white shadow-md px-4 py-3 flex items-center justify-between sticky top-0 z-50">
     <div class="text-xl font-bold text-gray-800">
@@ -11,8 +9,13 @@
         <a href="/agregar" class="text-sm text-white bg-black px-3 py-2 rounded hover:bg-gray-800 transition">
         + Producto
         </a>
-        <a href="/login" class="text-sm text-black hover:underline">
-        Login
-        </a>
+
+        <form method="post" action="/api/auth/logout">
+            <button class="text-sm px-3 py-1 rounded border border-zinc-300 hover:bg-zinc-50">
+                Salir
+            </button>
+        </form>
     </div>
+    
+
     </nav>

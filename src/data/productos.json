@@ -25,5 +25,23 @@
     "stock": 45,
     "imagen": "public/fotos_productos/fondo_pared_blanca.jpg",
     "creado": "2025-09-01T02:00:37.938Z"
+  },
+  {
+    "nombre": "vfddfv",
+    "descripcion": "dfvf",
+    "precio_compra": 24324,
+    "precio_venta": 534534,
+    "stock": 54,
+    "imagen": "public/fotos_productos/fondo_pared_blanca.jpg",
+    "creado": "2025-09-11T00:21:14.854Z"
+  },
+  {
+    "nombre": "vfddfv",
+    "descripcion": "hfghfg",
+    "precio_compra": 24324,
+    "precio_venta": 534534,
+    "stock": 54,
+    "imagen": "public/fotos_productos/fondo_pared_blanca.jpg",
+    "creado": "2025-09-14T01:24:55.240Z"
   }
 ]
