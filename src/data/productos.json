@@ -43,5 +43,23 @@
     "stock": 54,
     "imagen": "public/fotos_productos/fondo_pared_blanca.jpg",
     "creado": "2025-09-14T01:24:55.240Z"
+  },
+  {
+    "nombre": "pruebasticcccc",
+    "descripcion": "dsfdsf",
+    "precio_compra": 24,
+    "precio_venta": 2342,
+    "stock": 34,
+    "imagen": "https://www.bing.com/images/search?view=detailV2&ccid=ucYTLAWD&id=9FB449E5F23AA773FBBEEB78095C0BCC1F2D271B&thid=OIP.ucYTLAWDyaKvBVEOsobvSgHaJ3&mediaurl=https%3a%2f%2fi.pinimg.com%2foriginals%2fc0%2f99%2f33%2fc09933d983a3c1f2ca58b9a15d39f0b6.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.b9c6132c0583c9a2af05510eb286ef4a%3frik%3dGyctH8wLXAl46w%26pid%3dImgRaw%26r%3d0&exph=1785&expw=1340&q=pantalones&simid=608027221219028940&FORM=IRPRST&ck=9058AE3FE5393432921007D48B5E7AA5&selectedIndex=0&itb=0",
+    "creado": "2025-09-14T20:42:40.245Z"
+  },
+  {
+    "nombre": "pruebasticcccc2",
+    "descripcion": "fghfg",
+    "precio_compra": 24,
+    "precio_venta": 2342,
+    "stock": 34,
+    "imagen": "https://www.bing.com/images/search?view=detailV2&ccid=ucYTLAWD&id=9FB449E5F23AA773FBBEEB78095C0BCC1F2D271B&thid=OIP.ucYTLAWDyaKvBVEOsobvSgHaJ3&mediaurl=https%3a%2f%2fi.pinimg.com%2foriginals%2fc0%2f99%2f33%2fc09933d983a3c1f2ca58b9a15d39f0b6.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.b9c6132c0583c9a2af05510eb286ef4a%3frik%3dGyctH8wLXAl46w%26pid%3dImgRaw%26r%3d0&exph=1785&expw=1340&q=pantalones&simid=608027221219028940&FORM=IRPRST&ck=9058AE3FE5393432921007D48B5E7AA5&selectedIndex=0&itb=0",
+    "creado": "2025-09-14T20:43:27.329Z"
   }
 ]

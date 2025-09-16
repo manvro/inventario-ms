@@ -5,10 +5,11 @@ export async function GET(ctx: APIContext) {
     const supabase = getSupabaseServer(ctx);
 
     const { data, error } = await supabase
-        .from("productos")
-        .select("id, sku, nombre, precio_venta, stock, foto_url, activo")
-        .eq("activo", true)
-        .order("nombre", { ascending: true });
+    .from("productos")
+    .select("id, sku, nombre, precio_compra, precio_venta, stock, foto_url, activo")
+    .eq("activo", true)
+    .order("nombre", { ascending: true });
+
 
     if (error) {
         return new Response(JSON.stringify({ ok: false, error: error.message }), {

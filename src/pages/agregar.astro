@@ -1,11 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
 ---
 
 <Layout>
   <!-- Fondo con imagen -->
-  <div class="min-h-screen bg-cover bg-center flex items-center justify-center px-4 py-10"
-        style="background-image: bg-[url('/fondo_pared_blanca.jpg')];">
+  <div class="min-h-screen bg-cover bg-center flex items-center justify-center px-4 py-10 bg-[url('/fotos_productos/fondo_pared_blanca.jpg')]
+">
+
 
         <a href="/" class="text-">Volver</a>
 
@@ -46,11 +48,16 @@ import Layout from "../layouts/Layout.astro";
           <input type="number" id="stock" name="stock" class="w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
         </div>
 
-        <!-- Imagen -->
-        <div>
-          <label for="imagen" class="block text-sm font-semibold text-gray-700 mb-1">URL de imagen</label>
-          <input type="text" id="imagen" name="imagen" class="w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
-        </div>
+        <!-- Foto desde el dispositivo -->
+        <label class="block text-sm font-medium">Foto (opcional)</label>
+        <input id="inpArchivo" name="archivo" type="file" accept="image/*" class="w-full border p-2 rounded" />
+
+        <img id="previewFoto" class="mt-2 h-40 w-full object-cover rounded-xl border hidden" alt="Preview" />
+        <input type="hidden" id="imagen" name="imagen" />
+
+
+
+
 
         <!-- Botón -->
         <div class="text-center pt-2">
@@ -62,4 +69,99 @@ import Layout from "../layouts/Layout.astro";
     </div>
 
   </div>
+
+    <script type="module">
+      import { supabaseBrowser } from "/src/lib/supabase.ts";
+
+      const form   = document.querySelector("form");
+      const fileI  = document.getElementById("inpArchivo");
+      const prev   = document.getElementById("previewFoto");
+      const urlTxt = document.getElementById("imagen");
+
+      if (!form || !fileI || !urlTxt) {
+        console.error("Faltan elementos form/file/hidden en el DOM");
+      }
+
+      function nombreUnico(nombreOriginal) {
+        const ext = (nombreOriginal.split(".").pop() || "jpg").toLowerCase();
+        return `prod_${Date.now()}_${crypto.randomUUID()}.${ext}`;
+      }
+
+      async function subirImagen(file) {
+        if (!file) return null;
+        if (!/^image\//.test(file.type)) throw new Error("El archivo debe ser una imagen");
+        if (file.size > 5 * 1024 * 1024) throw new Error("Imagen > 5MB");
+
+        const supabase = supabaseBrowser();
+        const path = nombreUnico(file.name);
+
+        console.log("➡️ Subiendo a Storage:", { bucket: "productos", path, size: file.size });
+
+        const { error: upErr } = await supabase
+          .storage.from("productos")
+          .upload(path, file, {
+            upsert: false,           // pon true si quieres permitir sobreescritura (requiere policy UPDATE)
+            cacheControl: "3600"
+          });
+
+        if (upErr) {
+          console.error("❌ Storage upload error:", upErr);
+          throw new Error(upErr.message || "Fallo al subir a Storage");
+        }
+
+        const { data } = supabase.storage.from("productos").getPublicUrl(path);
+        const url = data?.publicUrl || "";
+        console.log("✅ URL pública obtenida:", url);
+        return url;
+      }
+
+      // 1) Preview y SUBIDA inmediata cuando el usuario elige imagen
+      fileI.addEventListener("change", async () => {
+        try {
+          const f = fileI.files?.[0];
+          console.log("change file:", f);
+
+          if (prev) {
+            if (f) {
+              prev.src = URL.createObjectURL(f);
+              prev.classList.remove("hidden");
+            } else {
+              prev.src = "";
+              prev.classList.add("hidden");
+            }
+          }
+
+          if (f) {
+            // subimos de inmediato y guardamos la URL en el hidden
+            const url = await subirImagen(f);
+            if (!url) throw new Error("No se obtuvo URL pública");
+            urlTxt.value = url;
+          } else {
+            urlTxt.value = "";
+          }
+        } catch (e) {
+          console.error(e);
+          alert(e.message || "Error al preparar la imagen");
+          urlTxt.value = "";
+        }
+      });
+
+      // 2) Enviar el form tal cual (ya con foto_url en el hidden)
+      form.addEventListener("submit", async (ev) => {
+        // (opcional) Validación: si el usuario seleccionó archivo pero no hay URL, no envíes
+        const seleccionoArchivo = !!fileI.files?.[0];
+        if (seleccionoArchivo && !urlTxt.value) {
+          ev.preventDefault();
+          alert("La imagen aún no termina de subir. Intenta de nuevo en unos segundos.");
+          return;
+        }
+        // Si no seleccionó archivo o ya tenemos URL, dejamos que envíe normal
+      });
+    </script>
+
+
+
+
+
+
 </Layout>
