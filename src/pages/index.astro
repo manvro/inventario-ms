@@ -68,6 +68,7 @@ const productosFiltrados: Producto[] = productos.filter((p) =>
         type="button"
         data-card
         data-index={String(i)}
+        data-id={p.id}  
         data-nombre={p.nombre}
         data-original-nombre={p.nombre}
         data-stock={String(p.stock)}
@@ -99,12 +100,13 @@ const productosFiltrados: Producto[] = productos.filter((p) =>
 
         <div class="p-5 space-y-4">
           <!-- Identificador oculto -->
+          <input type="hidden" id="mId" name="id" />
           <input type="hidden" id="mIndex" name="index" /><input type="hidden" id="mOriginalNombre" name="original_nombre" />
           <div class="flex items-center gap-4">
             <img id="mImagen" src="" alt="" class="w-20 h-20 object-cover rounded" />
             <div class="grow">
               <label class="block text-xs text-gray-500">Nombre</label>
-              <input id="mNombre" name="nombre" class="w-full border rounded px-3 py-2" readonly />
+              <input id="mNombre" name="nombre" class="w-full border rounded px-3 py-2" />
             </div>
           </div>
 
@@ -125,7 +127,7 @@ const productosFiltrados: Producto[] = productos.filter((p) =>
 
           <div>
             <label class="block text-xs text-gray-500">URL imagen</label>
-            <input id="mImagenTxt" name="imagen" class="w-full border rounded px-3 py-2" />
+            <input id="mImagenTxt" name="imagen" class="w-full border rounded px-3 py-2" readonly />
           </div>
         </div>
 

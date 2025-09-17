@@ -25,6 +25,7 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
         const mPC = must<HTMLInputElement>(qs("#mPrecioCompra"), "mPrecioCompra no encontrado");
         const mPV = must<HTMLInputElement>(qs("#mPrecioVenta"), "mPrecioVenta no encontrado");
         const mImgTxt = must<HTMLInputElement>(qs("#mImagenTxt"), "mImagenTxt no encontrado");
+        const mId = must<HTMLInputElement>(qs("#mId"), "mId no encontrado");
 
         // Abrir con datos desde la card
         document.addEventListener("click", (ev: MouseEvent) => {
@@ -42,6 +43,8 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
             const pc = card.dataset.precioCompra ?? card.getAttribute("data-precio-compra") ?? "0";
             const imagen = card.dataset.imagen ?? "";
 
+            const id = card.dataset.id ?? "";
+
             mIndex.value = idx;
             mOrigNom.value = origNom;       // 👈 clave estable para el backend
             mImagen.src = imagen; mImagen.alt = nombre;
@@ -50,6 +53,7 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
             mPC.value = pc;
             mPV.value = pv;
             mImgTxt.value = imagen;
+            mId.value = id;
 
             modal.showModal();
         });
@@ -70,18 +74,18 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
             e.preventDefault();
 
             const payload = {
-                original_nombre: mOrigNom.value,
+                id: mId.value, // 👈 ahora envía el id
                 nombre: mNombre.value,
                 stock: Number(mStock.value || 0),
                 precio_compra: Number(mPC.value || 0),
-                precio_venta: Number(mPV.value || 0),
-                imagen: mImgTxt.value,
+                precio_venta: Number(mPV.value || 0)
+                // imagen ya no se envía porque no se actualiza
             };
             try {
                 const res = await fetch("/api/productos/actualizar", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" }, // 👈 ahora JSON
-                body: JSON.stringify(payload),
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
                 });
 
                 const data = await res.json();
